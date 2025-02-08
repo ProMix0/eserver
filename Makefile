@@ -18,6 +18,7 @@ link-eserver-%.service: disable-%.service install/eserver-%.service
 disable-%:
 	@[[ "$$UID" == 0 ]] || ( echo User must be root to link services!; exit 1)
 	-systemctl disable "$*" 2>&1 > /dev/null || true
+	-systemctl show "$*" -p FragmentPath | sed 's/FragmentPath=//g' | xargs rm -rf
 
 #link: $(addprefix disable-,$(ESERVER_SERVICES)) $(addprefix link-,$(ESERVER_SERVICES))
 
